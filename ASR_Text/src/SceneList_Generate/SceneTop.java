@@ -15,6 +15,6 @@ public class SceneTop
 	{
 		//SceneGrab.Implementation( CORPUS_PATH, RAW_SCENE_PATH );
 		SceneFilter.Implementation( RAW_SCENE_PATH, FILTERED_SCENE_PATH );
-		//SceneGroup.Implementation( FILTERED_SCENE_PATH, SCENE_LIST_PATH );
+		SceneGroup.Implementation( FILTERED_SCENE_PATH, SCENE_LIST_PATH );
 	}
 }
