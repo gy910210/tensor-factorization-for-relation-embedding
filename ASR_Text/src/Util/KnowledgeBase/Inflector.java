@@ -108,21 +108,21 @@ public class Inflector {
         return underscoredWord;
     }
 
-    public  String pluralize(String word) {
+    public static  String pluralize(String word) {
         if (uncountables.contains(word.toLowerCase())) {
             return word;
         }
         return replaceWithFirstRule(word, plurals);
     }
 
-    public String singularize(String word) {
+    public static String singularize(String word) {
         if (uncountables.contains(word.toLowerCase())) {
             return word;
         }
         return replaceWithFirstRule(word, singulars);
     }
 
-    private String replaceWithFirstRule(String word, List<RuleAndReplacement> ruleAndReplacements) {
+    private static String replaceWithFirstRule(String word, List<RuleAndReplacement> ruleAndReplacements) {
 
         for (RuleAndReplacement rar : ruleAndReplacements) {
             String rule = rar.getRule();
