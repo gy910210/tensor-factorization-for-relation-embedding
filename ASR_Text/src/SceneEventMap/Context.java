@@ -51,10 +51,12 @@ public class Context
 		String tmp = null;
 	    for (String word : para.split("\\s+")) {
 	    	 tmp = word.toLowerCase().replaceAll(ILLEGAL_CHAR_REGEX, "");
+	    	 tmp = wn.lemmatize(tmp);
+	    	 
 	         if(In_Audible_Vocabulary(tmp,event_voc)) 
 	         {  
 	        	 if (wordList.containsKey(tmp)) {
-	                    wordList.put(tmp, wordList.get(word.toLowerCase()) + 1);
+	                    wordList.put(tmp, wordList.get(tmp.toLowerCase()) + 1);
 	                } else {
 	                    wordList.put(tmp, 1);
 	                }
@@ -66,13 +68,11 @@ public class Context
 	
 	private static boolean In_Audible_Vocabulary(String word, Set<String> event_voc) throws Exception
 	{
-		
 		for(String audible_words : event_voc)
 		{
 			List<String> tmp = wn.querySynonymsNoPos(audible_words);
-			if(tmp.contains(wn.lemmatize(word)))
+			if(tmp.contains(word))
 			{
-				
 				return true;
 			}
 		}

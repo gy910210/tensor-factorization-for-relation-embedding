@@ -9,16 +9,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 
+import Util.KnowledgeBase.Inflector;
+import Util.KnowledgeBase.WordNet;
 import Util.Paragraph.Paragraph;
 
 import com.google.common.collect.Lists;
 
 public class SceneEventMap
 {
-	private static String SCENE_PATH = "data/debug/scene.txt";
-	private static String CORPUS_PATH = "data/debug/corpus/";
+	private static String SCENE_PATH = "data/scene/scene_list.txt";
+	private static String CORPUS_PATH = "data/corpus/";
 	private static String MATRIX_PATH = "data/distribution/scene_event_dis.txt";
-	private static String EVENT_PATH = "data/debug/event.txt";
+	private static String EVENT_PATH = "data/event/grouped_event.txt";
 	private static final String CONTEXT_REGEX = "([Cc][Uu][Tt][Ss]?\\s*[Tt][Oo][:.]?\\s*)+"+
 			"|[Ss][Cc][Ee][Nn][Ee][:.]\\b?"+
 			"|\\W[Ii][Nn][Tt][:.]\\b?"+
@@ -35,7 +37,7 @@ public class SceneEventMap
 	{
 	    LoadScene();
 	    LoadEvent();
-//	    Demo();
+	   // Demo();
 	    TraverseCorpus();
 	}
 	
@@ -46,7 +48,10 @@ public class SceneEventMap
 		int cnt = 0;
 		while((line = br.readLine()) != null)
 		{
-			sceneSet.put(line, cnt++);
+			if(line.length() >= 3){
+				sceneSet.put(line, cnt++);
+			}
+		
 		}
 		br.close();
 	}
@@ -56,11 +61,12 @@ public class SceneEventMap
 		BufferedReader br = new BufferedReader(new FileReader(EVENT_PATH));
 		String line = null;
 		String tmp = null;
+		String[] st = null;
 		int cnt = 0;
 		while((line = br.readLine()) != null)
 		{
-		//	tmp = line.split(">>")[1];
-			tmp = line;
+			tmp = line.split(">>")[1];
+		//	tmp = line;
 			eventSet.put(tmp,cnt++);
 		}
 		br.close();
@@ -68,10 +74,11 @@ public class SceneEventMap
 	
 	private static void Demo()throws Exception
 	{
-		for(Entry<String, Integer> e : eventSet.entrySet())
-		{
-			System.out.println(e.getKey()+"--"+e.getValue());
-		}
+		WordNet wn = new WordNet();
+		Inflector in = new Inflector();
+		String tmp = in.tableize("sang");
+		//String tmp = wn.lemmatize("cats");
+	    System.out.println(tmp);
 	}
 	
 	private static void TraverseCorpus()throws Exception
@@ -101,49 +108,62 @@ public class SceneEventMap
 	
 	private static void Script_Split(String script)throws Exception
 	{
+		 int cnt_unrec = 0;
+		 int cnt_show = 0;
 		 String scene_name;
 		 Pattern pattern = Pattern.compile(CONTEXT_REGEX);
-	     Matcher matcher = pattern.matcher(script);
 	     
 	     List<String> contextList = Lists.newArrayList(Arrays.asList(pattern.split(script)));
-	       
+	     System.out.print(contextList.size());
+	     System.out.println(" contexts found.");
+	     
 	     for (String context : contextList) {	
-	    	 System.out.println(context);
-		     System.out.println("------");
-	        
+	         System.out.println(cnt_show);
 	         context = context.trim();
 	         if(context.length() == 0)
 	         {
 	            continue;
 	         }
 	                
-	         String[] tmp_st = context.split("\r\n");
-	         scene_name = Find_Scene(tmp_st[0]);
-	         Context t = new Context(context,scene_name, sceneSet.get(scene_name),eventSet.keySet());
-	         t.Write_Info();
+	        String[] tmp_st = context.split("\r\n");
+	        scene_name = Find_Scene(tmp_st[0]);
+	        
+	        if(scene_name.equals("-1"))
+	        {
+	        	 cnt_unrec++;
+	        	 continue;
+	        }
+	        else{
+	        	Context t = new Context(context,scene_name, sceneSet.get(scene_name),eventSet.keySet());
+	            t.Write_Info();
+	        }
+	        
+	        cnt_show++;
 	    }
+	     
+	    System.out.println(cnt_unrec +" scene(s) not recognized!");
 	}
 	
 	
 	private static String Find_Scene(String scene_line)
 	{
 		String tmp = "-1";
-		Pattern contextPattern = Pattern.compile(CONTEXT_REGEX);
-
-	    scene_line = " " + scene_line;
-		Matcher contextMatcher = contextPattern.matcher(scene_line);
-		if(contextMatcher.find())
-		{ 
-			scene_line = scene_line.replace(contextMatcher.group(),"").toLowerCase().trim();
-		}
-			
+		scene_line = scene_line.toLowerCase().trim();	
 		scene_line = scene_line.replaceAll(ILLEGAL_CHAR_REGEX, "");
 		scene_line = scene_line.replaceAll("\\s+"," ");
 		scene_line = scene_line.toLowerCase().trim();
 			   	
-		if(!scene_line.equals(""))
+		if(scene_line.equals(""))
 		{
-		   tmp = scene_line;
+			return tmp;
+		}
+		
+		for(String st:sceneSet.keySet())
+		{
+			if(scene_line.contains(st))
+			{
+				tmp = st;
+			}
 		}
 
 		return tmp;
