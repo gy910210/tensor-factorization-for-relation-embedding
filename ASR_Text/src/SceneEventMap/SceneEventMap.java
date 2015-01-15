@@ -1,5 +1,6 @@
 package SceneEventMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class SceneEventMap
 	private static String CORPUS_PATH = "data/corpus/";
 	private static String MATRIX_PATH = "data/distribution/scene_event_dis.txt";
 	private static String EVENT_PATH = "data/event/grouped_event.txt";
+	private static String PARA_PATH = "data/debug/paragraph/";
 	private static final String CONTEXT_REGEX = "([Cc][Uu][Tt][Ss]?\\s*[Tt][Oo][:.]?\\s*)+"+
 			"|[Ss][Cc][Ee][Nn][Ee][:.]\\b?"+
 			"|\\W[Ii][Nn][Tt][:.]\\b?"+
@@ -32,6 +34,8 @@ public class SceneEventMap
 	
 	private static HashMap<String, Integer> sceneSet = new HashMap<String, Integer>();
 	private static HashMap<String, Integer> eventSet = new HashMap<String, Integer>();
+	private static List<List<Integer>> sceneEventMap = new ArrayList<List<Integer>>();
+	
 	
 	public static void Implementation()throws Exception
 	{
@@ -39,7 +43,80 @@ public class SceneEventMap
 	    LoadEvent();
 	   // Demo();
 	    TraverseCorpus();
+	    ConvertToMatrix();
 	}
+	
+	private static void ConvertToMatrix() throws Exception
+	{
+		List<Integer> tmp = new ArrayList<Integer>();
+		
+		for(int i = 0; i < sceneSet.size(); ++i)
+		{
+			for(int j = 0; j < eventSet.size() ; ++j)
+			{
+				tmp.add(0);
+			}
+			
+			sceneEventMap.add(tmp);
+			
+		}
+		
+		File folder = new File(PARA_PATH);	
+		BufferedWriter bw = new BufferedWriter(new FileWriter(MATRIX_PATH));
+	    
+		String tmp_st = null;
+		Integer scene_number = -1;
+		Integer event_number = -1;
+		Integer event_time = 0;
+	   	
+	   	for(final File fileEntry: folder.listFiles())
+	   	{
+	   		tmp_st = fileEntry.getName();
+	   		scene_number = Integer.parseInt(tmp_st.split("\\.")[0]);
+	   		if(scene_number != -1){
+	   			System.out.println(scene_number);
+	   			sceneEventMap.set(scene_number, Distribution(fileEntry));
+	   		}
+	   		
+	   	}
+	   	
+	   	for(int i = 0; i < sceneSet.size(); ++i)
+	   	{
+	   		tmp = sceneEventMap.get(i);
+	   		for(int j = 0; j < eventSet.size(); ++j)
+	   		{
+	   			bw.append(Integer.toString(tmp.get(j)));
+	   			bw.append("\t");
+	   		}
+	   		bw.newLine();
+	   	}
+		
+	   	bw.close();
+	}
+	
+	private static List<Integer> Distribution(File file) throws Exception
+	{
+		List<Integer> rst = new ArrayList<Integer>();
+		for(int i = 0; i < eventSet.size(); ++i)
+		{
+			rst.add(0);
+		}
+		
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line, eventName = null;
+		Integer times = 0;
+		
+		while((line = br.readLine())!=null)
+		{
+			eventName = line.split("=")[0];
+			
+			times = Integer.parseInt(line.split("=")[1]);
+			rst.set(eventSet.get(eventName),times);
+		}
+		
+		return rst;
+	}
+
 	
 	private static void LoadScene()throws Exception
 	{
@@ -48,7 +125,7 @@ public class SceneEventMap
 		int cnt = 0;
 		while((line = br.readLine()) != null)
 		{
-			if(line.length() >= 3){
+			if(line.length() >= 0){
 				sceneSet.put(line, cnt++);
 			}
 		
@@ -84,7 +161,7 @@ public class SceneEventMap
 	private static void TraverseCorpus()throws Exception
 	{
 		File folder = new File(CORPUS_PATH);
-	  // 	BufferedWriter bw = new BufferedWriter(new FileWriter(MATRIX_PATH));
+	   	
 	   	int cnt = 0;
 	   	StringBuilder sb = new StringBuilder();
 	   	String line = null;
@@ -118,7 +195,7 @@ public class SceneEventMap
 	     System.out.println(" contexts found.");
 	     
 	     for (String context : contextList) {	
-	         System.out.println(cnt_show);
+	         System.out.println(cnt_show++);
 	         context = context.trim();
 	         if(context.length() == 0)
 	         {
@@ -135,10 +212,11 @@ public class SceneEventMap
 	        }
 	        else{
 	        	Context t = new Context(context,scene_name, sceneSet.get(scene_name),eventSet.keySet());
-	            t.Write_Info();
+	            
+	        	t.Write_Info();
 	        }
 	        
-	        cnt_show++;
+	     
 	    }
 	     
 	    System.out.println(cnt_unrec +" scene(s) not recognized!");
@@ -165,7 +243,6 @@ public class SceneEventMap
 				tmp = st;
 			}
 		}
-
 		return tmp;
 	}
 }
