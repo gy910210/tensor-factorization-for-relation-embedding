@@ -22,7 +22,7 @@ public class SceneEventMap
 	private static String CORPUS_PATH = "data/corpus/";
 	private static String MATRIX_PATH = "data/distribution/scene_event_dis.txt";
 	private static String EVENT_PATH = "data/event/grouped_event.txt";
-	private static String PARA_PATH = "data/debug/paragraph/";
+	private static String PARA_PATH = "data/paragraph/";
 	private static final String CONTEXT_REGEX = "([Cc][Uu][Tt][Ss]?\\s*[Tt][Oo][:.]?\\s*)+"+
 			"|[Ss][Cc][Ee][Nn][Ee][:.]\\b?"+
 			"|\\W[Ii][Nn][Tt][:.]\\b?"+
@@ -39,12 +39,66 @@ public class SceneEventMap
 	
 	public static void Implementation()throws Exception
 	{
-	    LoadScene();
-	    LoadEvent();
-	   // Demo();
-	    TraverseCorpus();
-	    ConvertToMatrix();
+//	    LoadScene();
+//	    LoadEvent();
+	    Demo();
+//	    TraverseCorpus();
+//	    ConvertToMatrix();
 	}
+	
+	private static void LoadScene()throws Exception
+	{
+		BufferedReader br = new BufferedReader(new FileReader(SCENE_PATH));
+		String line = null;
+		int cnt = 0;
+		while((line = br.readLine()) != null)
+		{
+			if(line.length() >= 0){
+				sceneSet.put(line, cnt++);
+			}
+		
+		}
+		br.close();
+	}
+	
+	private static void LoadEvent() throws Exception
+	{
+		BufferedReader br = new BufferedReader(new FileReader(EVENT_PATH));
+		String line = null;
+		String tmp = null;
+		String[] st = null;
+		int cnt = 0;
+		while((line = br.readLine()) != null)
+		{
+			tmp = line.split(">>")[1];
+		//	tmp = line;
+			eventSet.put(tmp,cnt++);
+		}
+		br.close();
+	}
+	
+	private static void Demo()throws Exception
+	{
+		String tmp,line = null;
+		Integer scene_number;
+		
+		File folder = new File(PARA_PATH);	
+		for(final File fileEntry: folder.listFiles())
+	   	{
+			int cnt = 0;
+	   		tmp = fileEntry.getName();
+	   		scene_number = Integer.parseInt(tmp.split("\\.")[0]);
+	   		BufferedReader br = new BufferedReader(new FileReader(PARA_PATH+tmp));
+	   		while((line = br.readLine())!=null)
+			{
+				cnt++;
+			}
+	   		System.out.println(Integer.toString(scene_number)+"--"+Integer.toString(cnt)+" events");
+	   	    br.close();
+	   	}
+		
+	}
+	
 	
 	private static void ConvertToMatrix() throws Exception
 	{
@@ -118,45 +172,7 @@ public class SceneEventMap
 	}
 
 	
-	private static void LoadScene()throws Exception
-	{
-		BufferedReader br = new BufferedReader(new FileReader(SCENE_PATH));
-		String line = null;
-		int cnt = 0;
-		while((line = br.readLine()) != null)
-		{
-			if(line.length() >= 0){
-				sceneSet.put(line, cnt++);
-			}
-		
-		}
-		br.close();
-	}
-	
-	private static void LoadEvent() throws Exception
-	{
-		BufferedReader br = new BufferedReader(new FileReader(EVENT_PATH));
-		String line = null;
-		String tmp = null;
-		String[] st = null;
-		int cnt = 0;
-		while((line = br.readLine()) != null)
-		{
-			tmp = line.split(">>")[1];
-		//	tmp = line;
-			eventSet.put(tmp,cnt++);
-		}
-		br.close();
-	}
-	
-	private static void Demo()throws Exception
-	{
-		WordNet wn = new WordNet();
-		Inflector in = new Inflector();
-		String tmp = in.tableize("sang");
-		//String tmp = wn.lemmatize("cats");
-	    System.out.println(tmp);
-	}
+
 	
 	private static void TraverseCorpus()throws Exception
 	{
@@ -211,14 +227,10 @@ public class SceneEventMap
 	        	 continue;
 	        }
 	        else{
-	        	Context t = new Context(context,scene_name, sceneSet.get(scene_name),eventSet.keySet());
-	            
+	        	Context t = new Context(context,scene_name, sceneSet.get(scene_name),eventSet.keySet());            
 	        	t.Write_Info();
 	        }
-	        
-	     
 	    }
-	     
 	    System.out.println(cnt_unrec +" scene(s) not recognized!");
 	}
 	

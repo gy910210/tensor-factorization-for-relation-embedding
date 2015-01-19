@@ -1,5 +1,6 @@
 package Entry;
 
+import EventList_Generate.EventFilter;
 import SceneEventMap.SceneEventMap;
 import SceneList_Generate.*;
 import Util.KnowledgeBase.Inflector;
@@ -13,6 +14,7 @@ public class Main
 		//SceneTop.Implementation();
 		//Test.Implementation();
 		SceneEventMap.Implementation();
+		//EventFilter.GroupSeed();
 	}
 	
 	
