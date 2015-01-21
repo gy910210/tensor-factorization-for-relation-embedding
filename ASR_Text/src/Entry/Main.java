@@ -1,6 +1,8 @@
 package Entry;
 
-import EventList_Generate.EventFilter;
+import java.util.List;
+
+import EventList_Generate.*;
 import SceneEventMap.SceneEventMap;
 import SceneList_Generate.*;
 import Util.KnowledgeBase.Inflector;
@@ -13,9 +15,13 @@ public class Main
 	{
 		//SceneTop.Implementation();
 		//Test.Implementation();
-		SceneEventMap.Implementation();
+		//SceneEventMap.Implementation();
 		//EventFilter.GroupSeed();
-	}
+		EventFilter.Implement();
+		//WordNetSeed.Implement();
+		//SoundRangersSeed.Implement();
+		
+ 	}
 	
 	
 }

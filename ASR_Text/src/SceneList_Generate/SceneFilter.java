@@ -106,7 +106,6 @@ public class SceneFilter
 
             }
 
-        	
             phrase = "";
             for(String tmp : cleaned)
             {
