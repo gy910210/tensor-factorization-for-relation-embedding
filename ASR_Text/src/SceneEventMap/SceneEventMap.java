@@ -30,6 +30,7 @@ public class SceneEventMap
 			"|[F][Aa][Dd][Ee][Ss]?\\s*[Ii][Nn][:.]?"+
 			"|\\([Oo][Pp][Ee][Nn][Ss]?[:.]?"+
 			"|[F][Ll][Aa][Ss][Hh]\\s*[Cc][Uu][Tt][:.]";
+	
 	private static final String ILLEGAL_CHAR_REGEX = "[^a-zA-Z,'\\s]";
 	
 	private static HashMap<String, Integer> sceneSet = new HashMap<String, Integer>();
