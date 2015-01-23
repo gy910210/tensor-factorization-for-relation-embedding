@@ -12,7 +12,7 @@ import edu.stanford.nlp.ling.TaggedWord;
 
 public class Context
 {
-	private static final String PARAGRAPH_PATH ="data/debug/paragraph/";
+	private static final String PARAGRAPH_PATH ="data/debug/paragraph3/";
 	private static Integer Scene_Num;
 	private static String Scene_Name;
 	private static Map<String, Integer> Event_Map;
@@ -58,11 +58,12 @@ public class Context
 	 		 {  
 	        	 if (wordList.containsKey(tmp)) {
 	                    wordList.put(tmp, wordList.get(tmp.toLowerCase()) + 1);
-	                } else {
+	             } 
+	        	 else {
 	                    wordList.put(tmp, 1);
-	                }
-	              }
-	        }
+	             }
+	         }
+	    }
 		
 		return wordList;
 	}

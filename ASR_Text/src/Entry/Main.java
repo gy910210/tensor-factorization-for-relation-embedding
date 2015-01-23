@@ -15,14 +15,14 @@ public class Main
 {
 	public static void main(String[] args)throws Exception
 	{
-		//SceneTop.Implementation();
+		SceneTop.Implementation();
 		//Test.Implementation();
 		//SceneEventMap.Implementation();
 		//EventFilter.GroupSeed();
 		//EventFilter.Implement();
 		//WordNetSeed.Implement();
 		//SoundRangersSeed.Implement();
-		Demo();
+		//Demo();
  	}
 	
 	public static void Demo()throws Exception

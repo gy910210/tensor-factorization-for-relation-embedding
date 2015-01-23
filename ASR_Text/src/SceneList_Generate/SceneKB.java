@@ -27,38 +27,38 @@ public class SceneKB
 		WordNet wn = new WordNet();
 		HashMap<String, Integer> wordSenseMap = new HashMap<String, Integer>();
 		/*wordSenseMap.put("activity", 0);*/
-//		wordSenseMap.put("scene", 0);
-//		wordSenseMap.put("occasion", 1);
-//		wordSenseMap.put("social_event", 0);
-//		wordSenseMap.put("construction", 2);
-//		wordSenseMap.put("facility", 0);
-//		wordSenseMap.put("facility", 3);
-//		wordSenseMap.put("vehicle", 0);
-//		wordSenseMap.put("organization", 0);
-//		wordSenseMap.put("field", 0);
-//		wordSenseMap.put("field", 7);
-//		wordSenseMap.put("geological_formation", 0);
-//		wordSenseMap.put("geological_phenomenon", 0);
-//		wordSenseMap.put("workplace", 0);
-//		wordSenseMap.put("building", 0);
-//		wordSenseMap.put("eating_place", 0);
-//		wordSenseMap.put("public_holiday", 0);
-//		wordSenseMap.put("public_transport", 0);
-//		wordSenseMap.put("group_action", 0);
-//		wordSenseMap.put("road", 0);
-//		wordSenseMap.put("terminal", 0);
-//		wordSenseMap.put("house", 0);
-//		wordSenseMap.put("house", 2);
-//		wordSenseMap.put("way", 5);
-//		wordSenseMap.put("room", 0);
-//		wordSenseMap.put("room", 1);
-//		wordSenseMap.put("place_of_business", 0);
-//		wordSenseMap.put("land_site", 0);
-//		wordSenseMap.put("city_district", 0);
-//		wordSenseMap.put("rural_area", 0);
-//		wordSenseMap.put("land", 2);
-//		wordSenseMap.put("social_group", 0);
-//		wordSenseMap.put("geographical_point", 0);
+		wordSenseMap.put("scene", 0);
+		wordSenseMap.put("occasion", 1);
+		wordSenseMap.put("social_event", 0);
+		wordSenseMap.put("construction", 2);
+		wordSenseMap.put("facility", 0);
+		wordSenseMap.put("facility", 3);
+		wordSenseMap.put("vehicle", 0);
+		wordSenseMap.put("organization", 0);
+		wordSenseMap.put("field", 0);
+		wordSenseMap.put("field", 7);
+		wordSenseMap.put("geological_formation", 0);
+		wordSenseMap.put("geological_phenomenon", 0);
+		wordSenseMap.put("workplace", 0);
+		wordSenseMap.put("building", 0);
+		wordSenseMap.put("eating_place", 0);
+		wordSenseMap.put("public_holiday", 0);
+		wordSenseMap.put("public_transport", 0);
+		wordSenseMap.put("group_action", 0);
+		wordSenseMap.put("road", 0);
+		wordSenseMap.put("terminal", 0);
+		wordSenseMap.put("house", 0);
+		wordSenseMap.put("house", 2);
+		wordSenseMap.put("way", 5);
+		wordSenseMap.put("room", 0);
+		wordSenseMap.put("room", 1);
+		wordSenseMap.put("place_of_business", 0);
+		wordSenseMap.put("land_site", 0);
+		wordSenseMap.put("city_district", 0);
+		wordSenseMap.put("rural_area", 0);
+		wordSenseMap.put("land", 2);
+		wordSenseMap.put("social_group", 0);
+		wordSenseMap.put("geographical_point", 0);
 		
 		List<String> hypoList = wn.queryRelatedWordsOfSenses(wordSenseMap, POS.NOUN, Pointer.HYPONYM, 6);
 		File rawFile = new File(RAW_PATH);
@@ -106,5 +106,29 @@ public class SceneKB
 				contextSet.add(context);
 		}
 		solvedWr.close();
+	}
+	
+	public static void Intersection(String srcA, String srcB, String dest)throws Exception
+	{
+		HashSet<String> sceneSet = new HashSet<String>();
+		BufferedReader br1 = new BufferedReader(new FileReader(srcA));
+		String line = null;
+		while((line = br1.readLine())!= null)
+			sceneSet.add(line);
+		
+		br1.close();
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(dest));
+		BufferedReader br2 = new BufferedReader(new FileReader(srcB));
+		while((line = br2.readLine())!= null)
+		{	if(sceneSet.contains(line))
+			{
+				bw.append(line);
+				bw.newLine();
+			}
+		}
+		br1.close();
+		bw.close();
+		
 	}
 }
