@@ -3,7 +3,7 @@ import java.io.*;
 
 public class createIntermediateData{
 
-    private static final String FB = "fb30";
+    private static final String FB = "fb15k";
 	private static final String FB_PATH = "dat/" + FB + "/train.txt";
 	private static final String ENTITY_IDX = "dat/" + FB +"-intermediate/entity.idx";
 	private static final String RELATION_IDX = "dat/" + FB +"-intermediate/relation.idx";
@@ -47,7 +47,7 @@ public class createIntermediateData{
 		}
 
 		String line = null;
-		int triple_cnter = 1;
+		int triple_cnter = 0;
 		System.out.println( "-- Read triple index --");
 		while( ( line = br.readLine() ) != null )
 		{
@@ -55,11 +55,11 @@ public class createIntermediateData{
 /*			System.out.println( splitted[ 0 ] );
 			System.out.println( splitted[ 1 ] );
 			System.out.println( splitted[ 2 ] ); */
-			List<String> tmp_left = leftList.get( Integer.parseInt( splitted[ 0 ] ) - 1 );
+			List<String> tmp_left = leftList.get( Integer.parseInt( splitted[ 0 ] )  );
 			tmp_left.add( Integer.toString( triple_cnter ) );
-			List<String> tmp_right = rightList.get( Integer.parseInt( splitted[ 2 ] ) - 1 );
+			List<String> tmp_right = rightList.get( Integer.parseInt( splitted[ 2 ] ) );
 			tmp_right.add( Integer.toString( triple_cnter ) );
-			List<String> tmp_rel = relList.get( Integer.parseInt( splitted[ 1 ] ) - 1 );
+			List<String> tmp_rel = relList.get( Integer.parseInt( splitted[ 1 ] )  );
 			tmp_rel.add( Integer.toString( triple_cnter ) );
 			triple_cnter++;
 		}
@@ -165,10 +165,9 @@ public class createIntermediateData{
 			String[] splitted = line.split("\\s+");
 /*			System.out.println( eIdList.indexOf( splitted[ 0 ] ));
 			System.out.println( splitted[ 0 ] ); */
-			bw_t.append( Integer.toString( eIdList.indexOf( splitted[ 0 ] ) + 1 ) + "\t" );
-			bw_t.append( Integer.toString( rIdList.indexOf( splitted[ 1 ] ) + 1 ) + "\t" );
-			bw_t.append( Integer.toString( eIdList.indexOf( splitted[ 2 ] ) + 1 ) + "\t" + 1 );
-			bw_t.newLine();
+			bw_t.append( Integer.toString( eIdList.indexOf( splitted[ 0 ] ) ) + "\t" );
+			bw_t.append( Integer.toString( rIdList.indexOf( splitted[ 1 ] ) ) + "\t" );
+			bw_t.append( Integer.toString( eIdList.indexOf( splitted[ 2 ] ) ) + "\n" );
 		}
 
 		bw_t.close();
@@ -195,7 +194,7 @@ public class createIntermediateData{
 		}
 		br.close();
 		
-		int cnter = 1;
+		int cnter = 0;
 		for( String st : eIdSet )
 		{
 			bw_e.append(Integer.toString( cnter ));
@@ -205,7 +204,7 @@ public class createIntermediateData{
 		}
 		bw_e.close();
 		
-		cnter = 1;
+		cnter = 0;
 		for( String st : rIdSet )
 		{
 			bw_r.append(Integer.toString( cnter ));
