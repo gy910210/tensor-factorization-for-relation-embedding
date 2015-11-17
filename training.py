@@ -21,13 +21,19 @@ def logistic( e1, r1, e2 ):
 # Read triple idx
 # return matrix of triple with annotation
 def readTripleToMat( ):
-    fid =  open( 'dat/' + fileName + '-intermediate/triple.idx', 'r')
+    negFid =  open( 'dat/' + fileName + '-intermediate/triple_negative.idx', 'r')
+    posFid =  open( 'dat/' + fileName + '-intermediate/triple.idx', 'r')
     mat = np.asmatrix([0,0,0,0])
-    for line in fid.readlines():
-        lineSplit = line.split('\t')
-        newrow = [ int( lineSplit[0] ), int( lineSplit[1] ), int( lineSplit[2] ),  int( lineSplit[3] )]
+    for line in posFid.readlines():
+        lineSplit = line.split()
+        newrow = [ int( lineSplit[0] ), int( lineSplit[1] ), int( lineSplit[2] ),  1]
         mat = np.vstack([ mat, newrow ])
-
+    for line in negFid.readlines():
+        lineSplit = line.split()
+        newrow = [ int( lineSplit[0] ), int( lineSplit[1] ), int( lineSplit[2] ),  0]
+        mat = np.vstack([mat, newrow])
+    negFid.close()
+    posFid.close()
     return mat
 
 
@@ -45,17 +51,17 @@ def readIncToDic( fid ):
 def derivativeToE( i ):
     rst = np.zeros([1, DIM])
     tmp_this = entityMat[ i ]
-    if leftDict.has_key( i + 1 ): 
-        for k in leftDict[ i + 1 ]:
+    if leftDict.has_key( i ): 
+        for k in leftDict[ i  ]:
             tmp_triple = tripleIdxMat[ k ] # since the first row is not used, the triple idx matrix starts from 1
-            tmp_rel = relationTensor[ tmp_triple[ 0, 1 ] - 1 ] # matrix for rm
-            tmp_right = entityMat[ tmp_triple[ 0, 2 ] - 1 ]  # matrix for ej
+            tmp_rel = relationTensor[ tmp_triple[ 0, 1 ]  ] # matrix for rm
+            tmp_right = entityMat[ tmp_triple[ 0, 2 ]  ]  # matrix for ej
             rst = rst + ( tmp_triple[ 0, 3 ] - logistic( tmp_this, tmp_rel, tmp_right ) ) * (( tmp_rel.dot( tmp_right.transpose() ) ).transpose()) 
-    if rightDict.has_key( i + 1 ):
-        for k in rightDict[ i + 1 ]:
-            tmp_triple = tripleIdxMat[ k ] # since the first row is not used, the triple idx matrix starts from 1
-            tmp_rel = relationTensor[ tmp_triple[ 0, 1 ] - 1 ] # matrix for rm
-            tmp_left = entityMat[ tmp_triple[ 0, 0 ] - 1 ]  # matrix for ej
+    if rightDict.has_key( i ):
+        for k in rightDict[ i ]:
+            tmp_triple = tripleIdxMat[ k ] 
+            tmp_rel = relationTensor[ tmp_triple[ 0, 1 ] ] # matrix for rm
+            tmp_left = entityMat[ tmp_triple[ 0, 0 ] ]  # matrix for ej
             rst = rst + ( tmp_triple[ 0, 3 ] - logistic( tmp_left, tmp_rel, tmp_this ) ) * ( tmp_this.dot(tmp_rel) ) 
     return rst
 
@@ -64,10 +70,10 @@ def derivativeToE( i ):
 def derivativeToR( block ):
     rst = np.zeros([DIM, DIM])
     tmp_this = relationTensor[ block ]
-    for k in relDict[ block + 1 ]:
-        tmp_triple = tripleIdxMat[ k ] # since the first row is not used, the triple idx matrix starts from 1
-        tmp_left = entityMat[ tmp_triple[ 0, 0 ] - 1 ] # vector for ei
-        tmp_right = entityMat[ tmp_triple[ 0, 2 ] - 1 ]  # vector for ej
+    for k in relDict[ block ]:
+        tmp_triple = tripleIdxMat[ k ] 
+        tmp_left = entityMat[ tmp_triple[ 0, 0 ]  ] # vector for ei
+        tmp_right = entityMat[ tmp_triple[ 0, 2 ]  ]  # vector for ej
         rst = rst + ( tmp_triple[ 0, 3 ] - logistic( tmp_left, tmp_this, tmp_right ) ) * ( tmp_left.transpose() ).dot( tmp_right ) 
 
     return rst
@@ -125,7 +131,7 @@ def main():
         rightDict = readIncToDic( fidRight )
         fidRight.close()
 
-        print 'start loading inc_left.list...'
+        print 'start loading inc_rel.list...'
         fidRel = open('dat/' + fileName + '-intermediate/inc_rel.list', 'r')
         global relDict
         relDict = readIncToDic( fidRel )
