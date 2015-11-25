@@ -3,6 +3,7 @@ from collections import OrderedDict
 entityNum = 14505
 relNum = 237
 validNum = 17535
+testNum = 20466
 DIM = 5
 
 def logistic( e1, r1, e2 ):
@@ -16,7 +17,7 @@ def logistic( e1, r1, e2 ):
 
 def main():
     # Read valid file
-    validFile = open('dat/fb15k-intermediate/valid.idx', 'r')
+    validFile = open('dat/fb15k-intermediate/test.idx', 'r')
     validIdx = []
     for line in validFile.readlines():
         splitted = line.split()
@@ -51,7 +52,7 @@ def main():
 
 
     # Iterate over valid file
-    rankFile = open('evaluation/rank15k_i15_d5.txt','w')
+    rankFile = open('evaluation/rank15k_i15_d5_test.txt','w')
     for i in range(len(validIdx)):
         print 'evaluating ' + str(i) + 'th triple'
         e1 = validIdx[ i ][ 0 ]
