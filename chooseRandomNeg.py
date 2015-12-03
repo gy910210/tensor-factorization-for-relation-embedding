@@ -29,14 +29,16 @@ outFid = open('dat/' + fileName + '-intermediate/triple_neg_random.idx','w')
 idx = []
 
 cnter = 0
+sub_cnt = 0
 for line in negFid.readlines():
 	cnter += 1
-	if len(idx) % 1000 == 0:
-		print len(idx)
+	if  cnter % 1000 == 0:
+		print sub_cnt
 	a = random.randint(0,4)
 	if a == 2:
 		idx += [ cnter ]
-		outFid.write(line)
+        	sub_cnt+=1
+        	outFid.write(line)
 
 
 
