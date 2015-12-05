@@ -2,7 +2,7 @@
 
 # This script generates Include file to facilitate training program
 # Input:/dat/fb15k-intermediate/triple.idx
-#       /dat/fb15k-intermediate/triple_neg_random.idx
+#       /dat/fb15k-intermediate/triple_negative.idx
 # Output:   /dat/fb15k-intermediate/inc_left.list
 #           /dat/fb15k-intermediate/inc_right.list
 #           /dat/fb15k-intermediate/inc_rel.list
@@ -38,7 +38,7 @@ inc_leftFid = open( 'dat/' + fileName + '-intermediate/inc_left.list' , 'w' )
 inc_rightFid = open( 'dat/' + fileName + '-intermediate/inc_right.list', 'w' )
 inc_relFid = open( 'dat/' + fileName + '-intermediate/inc_rel.list', 'w' )
 triple_posFid = open( 'dat/' + fileName + '-intermediate/triple.idx', 'r' )
-triple_negFid = open( 'dat/' + fileName + '-intermediate/triple_neg_random.idx', 'r')
+triple_negFid = open( 'dat/' + fileName + '-intermediate/triple_negative.idx', 'r')
 
 # Prepare lists to store results
 # inc_leftList, inc_rightList and inc_relList are all list of lists
