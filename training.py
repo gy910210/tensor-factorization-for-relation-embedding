@@ -24,13 +24,13 @@ def logistic( e1, r1, e2 ):
 # Read triple idx
 # return matrix of triple with annotation
 def readTripleToMat( ):
-    negFid =  open( 'dat/' + fileName + '-intermediate/triple_neg_random.idx', 'r')
+    negFid =  open( 'dat/' + fileName + '-intermediate/triple_negative.idx', 'r')
     posFid =  open( 'dat/' + fileName + '-intermediate/triple.idx', 'r')
     mat = np.asmatrix([0,0,0,0])
     if fileName == 'fb30':
         total = 71
     else:
-        total = 272115 + 272647
+        total = 272115 * 2 
     cnter = 0
 
     for line in posFid.readlines():
