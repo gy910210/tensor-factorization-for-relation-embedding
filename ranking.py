@@ -1,4 +1,9 @@
 #!/usr/bin/python
+# This script computes ranking for test.idx
+# Input:    /dat/fb15k-intermediate/test.idx
+#           /result/...
+# Output:   /evaluation/rank15k_i[ITERATION]_d[DIM].txt
+
 import numpy as np
 from collections import OrderedDict
 import sys
@@ -56,7 +61,7 @@ def main():
 
     # Iterate over valid file
     print 'Ranking...'
-    rankFile = open('evaluation/rank15k_i' + ITERATION+'_d' + str(DIM) + '_test.txt','w')
+    rankFile = open('evaluation/rank15k_i' + ITERATION+'_d' + str(DIM) + '.txt','w')
     for i in range(len(validIdx)):
         if i % 50 == 0:
             perc = int( 100.0 * i / len(validIdx) )
