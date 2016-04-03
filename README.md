@@ -1,7 +1,7 @@
 Matrix Factorization for Relation Embedding
 ============================================
 ## Introduction
-Relation is the key component of knowledge base, for example `isA` relation, `birth_in` relation, `dependency` relation in sentences and so on. This relations can be represented as a triple as `<lEntity, rel, rEntity>`. This proposal gives an innovation idea to generate relation and entity embedding by a matrix factorization approach. 
+Relation is the key component of knowledge base, for example `isA` relation, `birth_in` relation, `dependency` relation in sentences and so on. These relations can be represented as a triple as `<lEntity, rel, rEntity>`. This proposal gives an innovation idea to generate relation and entity embedding by a matrix factorization approach. 
 
 ## Approach
 We can represent entities and relations in the latent vector space, that is to say we represent an entity as a `n demension vector` and a relation as `n*n demension matrix`. Given a specific relation `<l, rel, r>`, we can give it a score as `El_T * Rel * Er` (vector * matrix * vector). To make it a classification problem, we can use Sigmoid or Hinge loss function as output.
