@@ -1,4 +1,4 @@
-Matrix Factorization for Relation Embedding
+Tensor Factorization for Relation Embedding
 ============================================
 ## Introduction
 Relation is the key component of knowledge base, for example `isA` relation, `birth_in` relation, `dependency` relation in sentences and so on. These relations can be represented as a triple as `<lEntity, rel, rEntity>`. This proposal gives an innovation idea to generate relation and entity embedding by a matrix factorization approach. 
